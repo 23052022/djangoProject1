@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -28,7 +30,12 @@ def add_book(request):
 def read_book(request, id_book):
     book = models.Book.objects.filter(id=id_book).first()
     genre = models.Genre.objects.filter(id=book.genre).first()
-    return HttpResponse(f'Name book - {book.title}, author - {book.author}, genre - {genre.name}, language - {book.language}')
+    file_path = models.BookFile.objects.filter(id_book=book.id).first()
+    get_home_path = Path(__file__).resolve().parent.parent
+    with open(str(get_home_path) + file_path.path_file, encoding='utf-8') as text:
+        read_book = text.readlines()
+
+    return HttpResponse(f'Name book - {book.title}, author - {book.author}, genre - {genre.name}, language - {book.language}\n {read_book}')
 
 
 def user_login(request):

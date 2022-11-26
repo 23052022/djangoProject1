@@ -23,5 +23,7 @@ class Comment(models.Model):
     id_book = models.IntegerField()
     comment = models.TextField()
 
-
+class BookFile(models.Model):
+    id_book = models.IntegerField()
+    path_file = models.CharField(max_length=300)
 
